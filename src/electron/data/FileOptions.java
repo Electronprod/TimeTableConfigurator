@@ -1,8 +1,11 @@
 package electron.data;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -38,6 +41,29 @@ public class FileOptions {
 		      return null;
 		    } 
 		  }
+	  /**
+	   * Method provides reading in one string with splitters chars
+	   * @param f - file to read
+	   * @param splitter - splitter string
+	   * @return String result
+	   */
+	  public static String getFileLineWithSplitter(List<String> path,String splitter) {
+		  List<String> lines = path;
+		  if(lines==null) {return "Error loading file: null";}
+		  String result="";
+		  for(int i = 0;i<lines.size();i++) {
+			  result=result+splitter+lines.get(i);
+		  }
+		  return result;
+	  }
+	  public static String getInternalFileLineWithSplitter(InputStream url,String splitter) throws IOException {
+		  BufferedReader reader = new BufferedReader(new InputStreamReader(url));
+	    	String about = "";
+	    	while(reader.ready()) {
+	    	     about = about+reader.readLine()+splitter;
+	    	}
+	    	return about;
+	  }
 	  /**
 	   * Method provides reading in one string
 	   * 

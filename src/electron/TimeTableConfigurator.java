@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -25,9 +26,11 @@ public class TimeTableConfigurator extends Application{
 	}
     @Override
     public void start(Stage stage) throws Exception {
-        Scene scene = new Scene(FXMLLoader.load(getClass().getResource("mainstage.fxml")));
+        Scene scene = new Scene(FXMLLoader.load(this.getClass().getClassLoader().getResource("electron/resources/mainstage.fxml")));
         stage.setTitle("TimeTableConfigurator");
         stage.setScene(scene);
+        Image img = new Image(this.getClass().getClassLoader().getResourceAsStream("electron/resources/icon.png"));
+        stage.getIcons().add(img);
         stage.setOnCloseRequest( event -> {logger.log("Closing proram..."); System.exit(0);} );
         stage.show();
     }

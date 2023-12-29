@@ -8,6 +8,7 @@ import java.util.Set;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import electron.utils.JSONSort;
 import electron.utils.logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -167,8 +168,8 @@ public class outFile {
 	 */
 	public static JSONArray getDay(int day,String classname) {
 		JSONObject days =(JSONObject) config.get(classname.toLowerCase());
-		logger.debug(" getDay: returning: "+days.get(String.valueOf(day))+" Day: "+day);
-		return (JSONArray) days.get(String.valueOf(day));
+		JSONArray result = JSONSort.sort((JSONArray) days.get(String.valueOf(day)));
+		return result;
 	}
 	/**
 	 * Add lesson to database

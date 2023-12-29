@@ -1,5 +1,10 @@
 package electron;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
@@ -10,8 +15,8 @@ import com.sun.tools.javac.util.StringUtils;
 
 import electron.data.FileOptions;
 import electron.data.outFile;
+import electron.preview.PreviewLauncher;
 import electron.utils.DayMethods;
-import electron.utils.License;
 import electron.utils.Other;
 import electron.utils.logger;
 import javafx.application.Platform;
@@ -237,16 +242,18 @@ public class Controls {
     	System.exit(0);
     }
     @FXML
-    private void about() {
-    	Alert alert = new Alert(Alert.AlertType.INFORMATION,License.about);
+    private void about() throws IOException {
+    	InputStream url = this.getClass().getClassLoader().getResourceAsStream("electron/resources/ABOUT.txt");
+    	Alert alert = new Alert(Alert.AlertType.INFORMATION,FileOptions.getInternalFileLineWithSplitter(url,"\n"));
     	alert.setTitle("About");
     	alert.setHeaderText("About TimeTableConfigurator");
     	alert.show();
     	statusbar.setText("Showed about info");
     }
     @FXML
-    private void licenseinfo() {
-    	Alert alert = new Alert(Alert.AlertType.INFORMATION,License.program);
+    private void licenseinfo() throws IOException {
+    	InputStream url = this.getClass().getClassLoader().getResourceAsStream("electron/resources/LICENSE.txt");
+    	Alert alert = new Alert(Alert.AlertType.INFORMATION,FileOptions.getInternalFileLineWithSplitter(url,"\n"));
     	alert.setTitle("License");
     	alert.setHeaderText("MIT License");
     	alert.show();
@@ -287,11 +294,15 @@ public class Controls {
      * Others
      */
     @FXML
-    public void lessonnamefield() {}
-    @FXML
-    public void teacherfield() {}
-    @FXML
-    public void lessontimefield() {}
+    private void showPreview() {
+    	try {
+			new PreviewLauncher();
+			statusbar.setText("Showed preview");
+		} catch (IOException e) {
+			e.printStackTrace();
+			new Alert(Alert.AlertType.ERROR,"Error showing preview: "+e.getMessage());
+		}
+    }
 
 }
 
