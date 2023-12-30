@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +17,7 @@ import org.json.simple.JSONObject;
 
 import com.sun.tools.javac.util.StringUtils;
 
+import electron.csv.CSV;
 import electron.data.FileOptions;
 import electron.data.outFile;
 import electron.preview.PreviewLauncher;
@@ -36,6 +41,8 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 import javafx.scene.control.Alert.AlertType;
 
 public class Controls {
@@ -182,7 +189,7 @@ public class Controls {
     /**
      * Update ListView items
      */
-    private void updateList() {
+    public void updateList() {
     	if(CurrentClass == null | CurrentDayID == 0) {
     		ObservableList<String> items = FXCollections.observableArrayList();
     		items.add("Select second option please");
@@ -244,7 +251,7 @@ public class Controls {
     @FXML
     private void about() throws IOException {
     	InputStream url = this.getClass().getClassLoader().getResourceAsStream("electron/resources/ABOUT.txt");
-    	Alert alert = new Alert(Alert.AlertType.INFORMATION,FileOptions.getInternalFileLineWithSplitter(url,"\n"));
+    	Alert alert = new Alert(Alert.AlertType.INFORMATION,FileOptions.getInternalFileLineWithSeparator(url,"\n"));
     	alert.setTitle("About");
     	alert.setHeaderText("About TimeTableConfigurator");
     	alert.show();
@@ -253,7 +260,7 @@ public class Controls {
     @FXML
     private void licenseinfo() throws IOException {
     	InputStream url = this.getClass().getClassLoader().getResourceAsStream("electron/resources/LICENSE.txt");
-    	Alert alert = new Alert(Alert.AlertType.INFORMATION,FileOptions.getInternalFileLineWithSplitter(url,"\n"));
+    	Alert alert = new Alert(Alert.AlertType.INFORMATION,FileOptions.getInternalFileLineWithSeparator(url,"\n"));
     	alert.setTitle("License");
     	alert.setHeaderText("MIT License");
     	alert.show();
@@ -303,7 +310,21 @@ public class Controls {
 			new Alert(Alert.AlertType.ERROR,"Error showing preview: "+e.getMessage());
 		}
     }
-
+    @FXML
+    private void importAction() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Document");
+        FileChooser.ExtensionFilter extFilter = 
+        new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showOpenDialog(TimeTableConfigurator.st);
+        if (file != null) {
+            statusbar.setText("Opening file: "+file.getName());
+            CSV.parse(file,this);
+        }else {
+        	statusbar.setText("You canceled action 'import'");
+        }
+    }
 }
 
 

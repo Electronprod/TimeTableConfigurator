@@ -38,6 +38,8 @@ public class FileOptions {
 		      return lines;
 		    } catch (IOException e) {
 		      e.printStackTrace();
+		      logerr("Error: "+e.getMessage());
+		      logerr("Cause: "+e.getCause());
 		      return null;
 		    } 
 		  }
@@ -47,7 +49,7 @@ public class FileOptions {
 	   * @param splitter - splitter string
 	   * @return String result
 	   */
-	  public static String getFileLineWithSplitter(List<String> path,String splitter) {
+	  public static String getFileLineWithSeparator(List<String> path,String splitter) {
 		  List<String> lines = path;
 		  if(lines==null) {return "Error loading file: null";}
 		  String result="";
@@ -56,7 +58,7 @@ public class FileOptions {
 		  }
 		  return result;
 	  }
-	  public static String getInternalFileLineWithSplitter(InputStream url,String splitter) throws IOException {
+	  public static String getInternalFileLineWithSeparator(InputStream url,String splitter) throws IOException {
 		  BufferedReader reader = new BufferedReader(new InputStreamReader(url));
 	    	String about = "";
 	    	while(reader.ready()) {

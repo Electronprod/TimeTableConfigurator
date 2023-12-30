@@ -22,7 +22,7 @@ public class PreviewLauncher {
 	}
 	private String generatePage() throws IOException {
 		InputStream url = getClass().getResourceAsStream("index.html");
-		String index = FileOptions.getInternalFileLineWithSplitter(url, "");
+		String index = FileOptions.getInternalFileLineWithSeparator(url, "");
 		String gen="";
 		for(int i=0;i<outFile.getClasses().size();i++) {
 			gen=gen+"<div>";
@@ -36,7 +36,7 @@ public class PreviewLauncher {
 	
 	private String generateTable(String classname) throws IOException {
 		InputStream url = getClass().getResourceAsStream("table.html");
-		String table = FileOptions.getInternalFileLineWithSplitter(url, "");
+		String table = FileOptions.getInternalFileLineWithSeparator(url, "");
 		table=table.replace("%classname%", classname);
 		table=table.replace("%monday%", generateLessons(1,classname));
 		table=table.replace("%tuesday%", generateLessons(2,classname));

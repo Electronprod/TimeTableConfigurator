@@ -99,6 +99,14 @@ public class outFile {
 	public static JSONObject getConfig() {
 		return config;
 	}
+	public static void clear() {
+		ObservableList<String> classes = getClasses();
+		for(int i = 0;i<classes.size();i++) {
+			config.remove(classes.get(i));
+		}
+		write();
+		logger.log("[RESOURCE_SYSTEM]: deleted all database data.");
+	}
 	/**
 	 * Write changes to database
 	 */
@@ -118,13 +126,13 @@ public class outFile {
 		}
 		//Generating days
 		JSONObject days = new JSONObject();
-		days.put(1, new JSONArray());
-		days.put(2, new JSONArray());
-		days.put(3, new JSONArray());
-		days.put(4, new JSONArray());
-		days.put(5, new JSONArray());
-		days.put(6, new JSONArray());
-		days.put(7, new JSONArray());
+		days.put("1", new JSONArray());
+		days.put("2", new JSONArray());
+		days.put("3", new JSONArray());
+		days.put("4", new JSONArray());
+		days.put("5", new JSONArray());
+		days.put("6", new JSONArray());
+		days.put("7", new JSONArray());
 		//Creating and adding class to config
 		config.put(classname.toLowerCase(), days);
 		write();	
@@ -171,6 +179,10 @@ public class outFile {
 		JSONArray result = JSONSort.sort((JSONArray) days.get(String.valueOf(day)));
 		return result;
 	}
+	public static JSONArray getDayRaw(int day,String classname) {
+		JSONObject days =(JSONObject) config.get(classname.toLowerCase());
+		return (JSONArray) days.get(String.valueOf(day));
+	}
 	/**
 	 * Add lesson to database
 	 * @param teacher
@@ -186,10 +198,6 @@ public class outFile {
 			logger.error("[RESOURCE_SYSTEM]: class not found: "+classname);
 			return false;
 		}
-		if(!time.contains(":") & time.length() == 4) {
-			logger.error("[RESOURCE_SYSTEM]: incorrect time entered: "+time);
-			return false;
-		}
 		if(day < 1 & day >7) {
 			logger.error("[RESOURCE_SYSTEM]: incorrect day entered: "+day);
 			return false;
@@ -199,7 +207,7 @@ public class outFile {
 		lessonobj.put("students", students);
 		lessonobj.put("teacher", teacher.toLowerCase());
 		lessonobj.put("lesson", lesson);
-		getDay(day,classname).add(lessonobj);
+		getDayRaw(day,classname).add(lessonobj);
 		write();
 		return true;
 	}
@@ -212,7 +220,7 @@ public class outFile {
 	 * @return success/fail
 	 */
 	public static boolean removeLesson(int day, String classname, String time, String lesson) {
-		JSONArray dayarr = getDay(day,classname);
+		JSONArray dayarr = getDayRaw(day,classname);
 		for(int i = 0;i<dayarr.size();i++) {
 			JSONObject item = (JSONObject) dayarr.get(i);
 			if(item.containsValue(lesson)) {

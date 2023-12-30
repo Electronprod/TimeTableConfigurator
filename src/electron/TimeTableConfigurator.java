@@ -17,6 +17,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class TimeTableConfigurator extends Application{
+	public static Stage st;
 	public static void main(String[] args) {
 		logger.enDebug=true;
 		logger.log("Starting TimeTableConfigurator...");
@@ -33,5 +34,6 @@ public class TimeTableConfigurator extends Application{
         stage.getIcons().add(img);
         stage.setOnCloseRequest( event -> {logger.log("Closing proram..."); System.exit(0);} );
         stage.show();
+        st=stage;
     }
 }
