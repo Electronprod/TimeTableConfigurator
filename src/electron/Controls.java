@@ -21,6 +21,7 @@ import electron.csv.CSV;
 import electron.data.FileOptions;
 import electron.data.outFile;
 import electron.preview.PreviewLauncher;
+import electron.students.addStudentGui;
 import electron.utils.DayMethods;
 import electron.utils.Other;
 import electron.utils.logger;
@@ -29,6 +30,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -39,6 +42,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
@@ -49,6 +53,7 @@ public class Controls {
 	/*
 	 * Variables
 	 */
+	private Scene viewscene;
 	private int CurrentDayID = 0;
 	private String CurrentClass = null;
 	@FXML
@@ -71,6 +76,8 @@ public class Controls {
 	private TextField teacherfieldobj;
 	@FXML
 	private TextField lessontimefieldobj;
+	@FXML
+	private TextArea tfield;
 	
 	 /*
      * Add/Delete events
@@ -127,7 +134,7 @@ public class Controls {
     	String lesson = lessonnamefieldobj.getText();
     	String teacher = teacherfieldobj.getText();
     	String time = lessontimefieldobj.getText();
-    	boolean result = outFile.addLesson(teacher, lesson, "ALL", time, CurrentDayID, CurrentClass);
+    	boolean result = outFile.addLesson(teacher, lesson, "all", time, CurrentDayID, CurrentClass);
     	if(!result) {
     		new Alert(AlertType.ERROR,"Error adding lesson.");
     		statusbar.setText("Adding lesson failed.");
@@ -210,7 +217,10 @@ public class Controls {
     @FXML
     private void studentsUpdate() {
     	logger.log("[EVENT]: studentsUpdate event triggered.");
-    	//daybox.setItems();
+    	ObservableList<String> groups = FXCollections.observableArrayList();
+    	groups.add("ALL");
+    	groups.add("Select");
+    	studentbox.setItems(groups);
     }
     
     /*
@@ -243,11 +253,40 @@ public class Controls {
     	statusbar.setText("Toggled state to "+outFile.getApiState());
     }
     @FXML
-    private void closebtn() {
+    private void closebtn() {        
     	statusbar.setText("Thank you. Bye.");
     	logger.log("Thank you. Bye.");
     	System.exit(0);
     }
+	@FXML
+	private void save() {
+		logger.log("[EVENT]: studentgui: triggered SAVE event.");
+		//Save logic
+		switchGui(false);
+	}
+	@FXML
+	private void cancel() {
+		logger.log("[EVENT]: studentgui: triggered CANCEL event.");
+		switchGui(false);
+	}
+	private void switchGui(boolean to){
+		if(to) {
+			viewscene=TimeTableConfigurator.st.getScene();
+	        Scene scene;
+			try {
+				scene = new Scene(FXMLLoader.load(this.getClass().getClassLoader().getResource("electron/resources/studentstage.fxml")));
+				TimeTableConfigurator.st.setScene(scene);
+				logger.log("[GUI]: switched gui to student view.");
+			} catch (IOException e) {
+				// TODO Автоматически созданный блок catch
+				e.printStackTrace();
+			}
+		}else {
+			TimeTableConfigurator.st.setScene(viewscene);
+			logger.log("[GUI]: switched gui to lessons view.");
+		}
+	}
+	
     @FXML
     private void about() throws IOException {
     	InputStream url = this.getClass().getClassLoader().getResourceAsStream("electron/resources/ABOUT.txt");

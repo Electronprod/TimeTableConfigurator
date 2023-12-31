@@ -202,6 +202,15 @@ public class outFile {
 			logger.error("[RESOURCE_SYSTEM]: incorrect day entered: "+day);
 			return false;
 		}
+		if(!time.contains(":")) {
+			logger.error("[RESOURCE_SYSTEM]: incorrect time entered: "+time);
+			return false;
+		}
+		if(time.length()==4) {
+			logger.debug("[RESOURCE_SYSTEM]: addLesson: fixing time: "+time);
+			time = "0"+time;
+			logger.debug("[RESOURCE_SYSTEM]: addLesson: fixed time: "+time);
+		}
 		JSONObject lessonobj = new JSONObject();
 		lessonobj.put("time", time);
 		lessonobj.put("students", students);
