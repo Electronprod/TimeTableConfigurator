@@ -1,52 +1,35 @@
 package electron;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.Optional;
 
 import org.json.simple.JSONObject;
-
-import com.sun.tools.javac.util.StringUtils;
 
 import electron.csv.CSV;
 import electron.data.FileOptions;
 import electron.data.outFile;
 import electron.preview.PreviewLauncher;
-import electron.students.addStudentGui;
 import electron.utils.DayMethods;
 import electron.utils.Other;
 import electron.utils.logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
-import javafx.stage.Window;
 import javafx.scene.control.Alert.AlertType;
 
 public class Controls {

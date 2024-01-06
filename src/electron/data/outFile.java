@@ -261,7 +261,8 @@ public class outFile {
 		if(dayarr==null) {return list;}
 		for(int i = 0;i<dayarr.size();i++) {
 			JSONObject lesson = (JSONObject) dayarr.get(i);
-			String lessonview = String.valueOf(lesson.get("time"))+" | "+String.valueOf(lesson.get("lesson"))+" | "+String.valueOf(lesson.get("teacher"))+" | "+String.valueOf(lesson.get("students"));
+			//String lessonview = String.valueOf(lesson.get("time"))+" | "+String.valueOf(lesson.get("lesson"))+" | "+String.valueOf(lesson.get("teacher"))+" | "+String.valueOf(lesson.get("students"));
+			String lessonview = String.valueOf(lesson.get("time"))+" | "+String.valueOf(lesson.get("lesson"))+" | "+String.valueOf(lesson.get("teacher"));
 			list.add(lessonview);
 		}
 		return list;
