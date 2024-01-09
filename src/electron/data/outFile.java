@@ -1,6 +1,8 @@
 package electron.data;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -266,5 +268,8 @@ public class outFile {
 			list.add(lessonview);
 		}
 		return list;
+	}
+	public static Path getPath() {
+		return Paths.get(outf.getPath());
 	}
 }

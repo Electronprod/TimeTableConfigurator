@@ -3,6 +3,10 @@ package electron;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 
 import org.json.simple.JSONObject;
@@ -345,6 +349,28 @@ public class Controls {
             CSV.parse(file,this);
         }else {
         	statusbar.setText("You canceled action 'import'");
+        }
+    }
+    @FXML
+    private void export() {
+    	FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Document");
+        FileChooser.ExtensionFilter extFilter = 
+        new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showSaveDialog(TimeTableConfigurator.st);
+        if (file != null) {
+            logger.debug(" Exporting to: "+file.getPath());
+            try {
+                Files.copy(outFile.getPath(), Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
+                new modAlert(Alert.AlertType.INFORMATION,"File exported successfully.");
+                
+            } catch (IOException e) {
+                e.printStackTrace();
+                new Alert(Alert.AlertType.ERROR,"Error exporting file: "+e.getMessage());
+            }
+        }else {
+        	statusbar.setText("You canceled action 'export'");
         }
     }
 }

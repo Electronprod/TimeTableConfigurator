@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 public class TimeTableConfigurator extends Application{
 	public static Stage st;
 	public static void main(String[] args) {
-		logger.enDebug=true;
+		logger.enDebug=false;
 		logger.log("Starting TimeTableConfigurator...");
 		outFile.load();
 		logger.loadConsole();

@@ -98,6 +98,7 @@
                   </Label>
                   <Button layoutX="33.0" layoutY="183.0" mnemonicParsing="false" onAction="#showPreview" prefHeight="26.0" prefWidth="77.0" text="Preview" textAlignment="CENTER" />
                   <Button layoutX="31.0" layoutY="215.0" mnemonicParsing="false" onAction="#importAction" prefHeight="21.0" prefWidth="81.0" text="Import" />
+                  <Button layoutX="33.0" layoutY="247.0" mnemonicParsing="false" onAction="#export" prefHeight="25.0" prefWidth="79.0" text="Export" />
                </children>
             </AnchorPane>
          </left>
