@@ -12,7 +12,7 @@ Please, see *[wiki](https://github.com/Electronprod/TimeTableConfigurator/wiki)*
 ## ⚙️ Setup
 1. Download latest release of program
 2. Unpack the zip archive wherever it is convenient for you
-3. Launch start.bat(Windows) or start.sh(Linux) file.
+3. Launch TimeTableConfigurator.jar file.
    
 ## ⚖️ License
 This **TimeTableConfigurator** is distributed under the *[MIT](https://opensource.org/licenses/MIT)*.
