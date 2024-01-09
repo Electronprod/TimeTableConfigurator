@@ -2,10 +2,13 @@ package electron.data;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -88,9 +91,10 @@ public class FileOptions {
 	 */
 	  public static void writeFile(String in, File f) {
 		    for (; !f.canWrite() && !f.canRead(); LockSupport.parkNanos(100L));
-		    FileWriter fr = null;
+		    Writer fr = null;
 		    try {
-		      fr = new FileWriter(f);
+		      fr = new OutputStreamWriter(new FileOutputStream(f), StandardCharsets.UTF_8);
+		      
 		      fr.write(in);
 		    } catch (IOException e) {
 		      e.printStackTrace();
