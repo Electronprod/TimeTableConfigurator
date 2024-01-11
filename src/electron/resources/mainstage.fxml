@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="347.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="electron.Controls">
+   <children>
+      <BorderPane prefHeight="392.0" prefWidth="600.0">
+         <top>
+            <MenuBar fx:id="topbar" BorderPane.alignment="CENTER">
+              <menus>
+                <Menu fx:id="settingsbtn" mnemonicParsing="false" onShowing="#menuOpened" text="Settings">
+                  <items>
+                        <MenuItem mnemonicParsing="false" onAction="#showPreview" text="Preview" />
+                        <MenuItem mnemonicParsing="false" onAction="#importAction" text="Import" />
+                        <MenuItem mnemonicParsing="false" onAction="#export" text="Export" />
+                        <MenuItem fx:id="send" mnemonicParsing="false" onAction="#send" text="Send" />
+                        <MenuItem fx:id="closebutton" mnemonicParsing="false" onAction="#closebtn" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                        <MenuItem mnemonicParsing="false" onAction="#licenseinfo" text="License" />
+                    <MenuItem fx:id="aboutbtn" mnemonicParsing="false" onAction="#about" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </top>
+         <bottom>
+            <HBox prefHeight="15.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="statusbar" prefHeight="17.0" prefWidth="598.0" text="Starting app..." />
+               </children>
+            </HBox>
+         </bottom>
+         <right>
+            <AnchorPane fx:id="infopane" prefHeight="351.0" prefWidth="151.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label layoutX="35.0" layoutY="14.0" text="Lesson name:">
+                     <font>
+                        <Font name="Arial Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="35.0" layoutY="61.0" text="Teacher name:">
+                     <font>
+                        <Font name="Arial Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="37.0" layoutY="107.0" text="Lesson time:" textAlignment="CENTER">
+                     <font>
+                        <Font name="Arial Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="lessonnamefieldobj" layoutX="24.0" layoutY="29.0" prefHeight="9.0" prefWidth="107.0" promptText="Math" />
+                  <TextField fx:id="teacherfieldobj" layoutX="26.0" layoutY="76.0" prefHeight="25.0" prefWidth="104.0" promptText="Alexander" />
+                  <TextField fx:id="lessontimefieldobj" layoutX="25.0" layoutY="122.0" prefHeight="25.0" prefWidth="105.0" promptText="09:00" />
+                  <Button fx:id="addlessonbtn" layoutX="29.0" layoutY="162.0" mnemonicParsing="false" onAction="#addlesson" prefHeight="25.0" prefWidth="87.0" text="Add lesson" textAlignment="CENTER" />
+                  <Button fx:id="dellesonbtn" layoutX="29.0" layoutY="195.0" mnemonicParsing="false" onAction="#dellesson" text="Delete lesson" />
+               </children></AnchorPane>
+         </right>
+         <center>
+            <ListView fx:id="list" prefHeight="323.0" prefWidth="305.0" BorderPane.alignment="CENTER" />
+         </center>
+         <left>
+            <AnchorPane prefHeight="349.0" prefWidth="143.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ComboBox fx:id="classbox" layoutX="19.0" layoutY="22.0" onAction="#selectClass" onShowing="#classSelectorUpdate" prefHeight="15.0" prefWidth="105.0" promptText="Class" />
+                  <Button fx:id="addclassbtn" layoutX="31.0" layoutY="102.0" mnemonicParsing="false" onAction="#addclass" prefHeight="25.0" prefWidth="83.0" text="Add class" textAlignment="CENTER" />
+                  <Button fx:id="delclassbtn" layoutX="30.0" layoutY="135.0" mnemonicParsing="false" onAction="#delclass" prefHeight="25.0" prefWidth="85.0" text="Delete class" />
+                  <ComboBox fx:id="daybox" layoutX="19.0" layoutY="53.0" onAction="#selectDay" onShowing="#daySelectorUpdate" prefHeight="15.0" prefWidth="105.0" promptText="Day" />
+                  <Label layoutX="59.0" layoutY="5.0" text="View" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="53.0" layoutY="85.0" text="Classes" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </left>
+      </BorderPane>
+   </children>
+</VBox>
