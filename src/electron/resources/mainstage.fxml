@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -23,10 +22,10 @@
               <menus>
                 <Menu fx:id="settingsbtn" mnemonicParsing="false" onShowing="#menuOpened" text="Settings">
                   <items>
-                        <CheckMenuItem fx:id="togglesitebtn" mnemonicParsing="false" onAction="#togglesite" text="Disable site" />
-                        <CheckMenuItem fx:id="toggleapibtn" mnemonicParsing="false" onAction="#toggleapi" text="Disable API" />
-                        <MenuItem mnemonicParsing="false" onAction="#changeSitePort" text="Change Site port" />
-                        <MenuItem mnemonicParsing="false" onAction="#changeApiPort" text="Change API port" />
+                        <MenuItem mnemonicParsing="false" onAction="#showPreview" text="Preview" />
+                        <MenuItem mnemonicParsing="false" onAction="#importAction" text="Import" />
+                        <MenuItem mnemonicParsing="false" onAction="#export" text="Export" />
+                        <MenuItem fx:id="send" mnemonicParsing="false" onAction="#send" text="Send" />
                         <MenuItem fx:id="closebutton" mnemonicParsing="false" onAction="#closebtn" text="Close" />
                   </items>
                 </Menu>
@@ -91,14 +90,6 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Label layoutX="51.0" layoutY="166.0" text="Tweaks">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Label>
-                  <Button layoutX="33.0" layoutY="183.0" mnemonicParsing="false" onAction="#showPreview" prefHeight="26.0" prefWidth="77.0" text="Preview" textAlignment="CENTER" />
-                  <Button layoutX="31.0" layoutY="215.0" mnemonicParsing="false" onAction="#importAction" prefHeight="21.0" prefWidth="81.0" text="Import" />
-                  <Button layoutX="33.0" layoutY="247.0" mnemonicParsing="false" onAction="#export" prefHeight="25.0" prefWidth="79.0" text="Export" />
                </children>
             </AnchorPane>
          </left>

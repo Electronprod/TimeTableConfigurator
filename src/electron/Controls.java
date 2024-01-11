@@ -1,13 +1,18 @@
 package electron;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import org.json.simple.JSONObject;
 
@@ -16,7 +21,6 @@ import electron.data.FileOptions;
 import electron.data.outFile;
 import electron.preview.PreviewLauncher;
 import electron.utils.DayMethods;
-import electron.utils.Other;
 import electron.utils.logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -26,7 +30,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -45,10 +48,6 @@ public class Controls {
 	private String CurrentClass = null;
 	@FXML
 	private Label statusbar;
-	@FXML
-	private CheckMenuItem toggleapibtn;
-	@FXML
-	private CheckMenuItem togglesitebtn;
 	@FXML
 	private ListView<String> list;
 	@FXML
@@ -215,29 +214,7 @@ public class Controls {
      */
     @FXML
     private void menuOpened() {
-    	logger.log("[EVENT]: settingopened event triggered.");
-		togglesitebtn.setSelected(!outFile.getSiteState());
-		toggleapibtn.setSelected(!outFile.getApiState());
-    }
-    @FXML
-    private void togglesite() {
-    	logger.log("[EVENT]: togglesite event triggered.");
-    	JSONObject siteobj = (JSONObject) outFile.getConfig().get("site");
-    	outFile.toggleSiteState();
-    	siteobj.remove("enabled");
-    	siteobj.put("enabled", outFile.getSiteState());
-    	logger.log("[EVENT]: toggled state to "+outFile.getSiteState());
-    	statusbar.setText("Toggled state to "+outFile.getSiteState());
-    }
-    @FXML
-    private void toggleapi() {
-    	logger.log("[EVENT]: toggleapi event triggered.");
-    	JSONObject siteobj = (JSONObject) outFile.getConfig().get("api");
-    	outFile.toggleApiState();
-    	siteobj.remove("enabled");
-    	siteobj.put("enabled", outFile.getApiState());
-    	logger.log("[EVENT]: toggled state to "+outFile.getApiState());
-    	statusbar.setText("Toggled state to "+outFile.getApiState());
+    	//logger.log("[EVENT]: settingopened event triggered.");
     }
     @FXML
     private void closebtn() {        
@@ -292,36 +269,6 @@ public class Controls {
     	alert.show();
     	statusbar.setText("Showed license info");
     }
-    @FXML
-    private void changeApiPort() {
-    	TextInputDialog inputdialog = new TextInputDialog(outFile.getApiPort()+"");
-    	inputdialog.setContentText("PORT: ");
-    	inputdialog.setHeaderText("API port changer");
-    	inputdialog.showAndWait();
-    	if(!Other.isNum(inputdialog.getEditor().getText())) {
-    		Alert alert = new Alert(Alert.AlertType.ERROR,"Incorrect input. Try again.\nYou can enter only numbers");
-    		alert.show();
-    		return;
-    	}
-    	int apiport = Integer.parseInt(inputdialog.getEditor().getText());
-    	outFile.setApiPort(apiport);
-    	statusbar.setText("Changed API port to: "+ apiport);	
-    }
-    @FXML
-    private void changeSitePort() {
-    	TextInputDialog inputdialog = new TextInputDialog(outFile.getSitePort()+"");
-    	inputdialog.setContentText("PORT: ");
-    	inputdialog.setHeaderText("Site port changer");
-    	inputdialog.showAndWait();
-    	if(!Other.isNum(inputdialog.getEditor().getText())) {
-    		Alert alert = new Alert(Alert.AlertType.ERROR,"Incorrect input. Try again.\nYou can enter only numbers");
-    		alert.show();
-    		return;
-    	}
-    	int siteport = Integer.parseInt(inputdialog.getEditor().getText());
-    	outFile.setSitePort(siteport);
-    	statusbar.setText("Changed Site port to: "+ siteport);	
-    }
     
     /*
      * Others
@@ -372,6 +319,41 @@ public class Controls {
         }else {
         	statusbar.setText("You canceled action 'export'");
         }
+    }
+    @FXML
+    private void send() {
+    	statusbar.setText("Waiting for ip:port");
+    	//Getting server address
+    	String address = JOptionPane.showInputDialog(new JFrame(), "Enter ip:port:", "Connect to server", JOptionPane.QUESTION_MESSAGE);
+        //Getting auth data
+    	String authdata = JOptionPane.showInputDialog(new JFrame(), "Enter login:password:", "Connect to server", JOptionPane.QUESTION_MESSAGE);
+    	statusbar.setText("Connecting to "+address);
+    	String[] addrdata = address.split(":");
+    	String[] auth = authdata.split(":");
+    	try {
+			Socket client = new Socket(addrdata[0], Integer.parseInt(addrdata[1]));
+	    	statusbar.setText("Sending data...");
+	    	//Sending auth data
+	    	JSONObject audata = new JSONObject();
+	    	audata.put("login", auth[0]);
+	    	audata.put("password", auth[1]);
+	    	sendData(client,audata.toJSONString());
+	    	//Sending database's data
+	    	JSONObject data = new JSONObject();
+	    	data.put("data", outFile.getConfig().toJSONString());
+	    	sendData(client,data.toJSONString());
+	    	new modAlert(Alert.AlertType.INFORMATION,"Sent data to server. Check it on site.").Show();
+	    	client.close();
+	    	statusbar.setText("Disconnected from server.");
+    	} catch (NumberFormatException | IOException e) {
+			new Alert(Alert.AlertType.ERROR,"Error connecting to server: "+e.getMessage()).show();;
+			return;
+		}
+    }
+    private void sendData(Socket client,String data) throws IOException {
+    	OutputStream outToServer = client.getOutputStream();
+        DataOutputStream out = new DataOutputStream(outToServer);
+        out.writeUTF(data);
     }
 }
 

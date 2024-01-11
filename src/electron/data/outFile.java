@@ -18,10 +18,6 @@ import javafx.collections.ObservableList;
 public class outFile {
 	private static File outf = new File("config.json");
 	private static JSONObject config;
-	private static boolean sitestate;
-	private static int siteport;
-	private static boolean apistate;
-	private static int apiport;
 	
 	/**
 	 * Must be called before other methods from this file
@@ -31,68 +27,13 @@ public class outFile {
 		if (!outf.exists()) {
 			FileOptions.loadFile(outf);
 			config = new JSONObject();
-			config.put("site", generateSetting(true,80));
-			config.put("api", generateSetting(true,81));
-			sitestate = true;
-			siteport = 80;
-			apistate = true;
-			apiport = 81;
 			write();
 		}else {
 			config = (JSONObject) FileOptions.ParseJs(FileOptions.getFileLine(outf));
 			//Load settings for gui
 			JSONObject site = (JSONObject) config.get("site");
-			sitestate = Boolean.parseBoolean(String.valueOf(site.get("enabled")));
-			siteport = Integer.parseInt(String.valueOf(site.get("port")));
-			JSONObject api = (JSONObject) config.get("api");
-			apistate = Boolean.parseBoolean(String.valueOf(api.get("enabled")));
-			apiport = Integer.parseInt(String.valueOf(api.get("port")));
 		}
 		logger.log("[RESOURCE_SYSTEM]: loaded.");
-	}
-	/*
-	 * Program settings
-	 */
-	private static JSONObject generateSetting(boolean state, int port) {
-		JSONObject sitesettings = new JSONObject();
-		sitesettings.put("enabled", state);
-		sitesettings.put("port", port);
-		return sitesettings;
-	}
-	public static boolean getSiteState() {
-		return sitestate;
-	}
-	public static boolean getApiState() {
-		return apistate;
-	}
-	public static void toggleSiteState() {
-		sitestate = !sitestate;
-		writeSettingsChanges();
-	}
-	public static void toggleApiState() {
-		apistate = !apistate;
-		writeSettingsChanges();
-	}
-	private static void writeSettingsChanges() {
-		config.remove("site");
-		config.remove("api");
-		config.put("site", generateSetting(sitestate,siteport));
-		config.put("api", generateSetting(apistate,apiport));
-		write();
-	}
-	public static int getSitePort() {
-		return siteport;
-	}
-	public static int getApiPort() {
-		return apiport;
-	}
-	public static void setApiPort(int port) {
-		apiport = port;
-		writeSettingsChanges();
-	}
-	public static void setSitePort(int port) {
-		siteport=port;
-		writeSettingsChanges();
 	}
 	/**
 	 * Get config JSONObject
