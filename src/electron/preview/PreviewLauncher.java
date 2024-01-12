@@ -10,9 +10,11 @@ import org.json.simple.JSONObject;
 
 import electron.data.FileOptions;
 import electron.data.outFile;
+import electron.utils.logger;
 
 public class PreviewLauncher {
-
+	private String lasttime;
+	private int counter;
 	public PreviewLauncher() throws IOException {
 		File showfile = new File("preview.html");
 		FileOptions.loadFile(showfile);
@@ -61,6 +63,13 @@ public class PreviewLauncher {
 	}
 	private String generateLesson(JSONObject lesson,int num) {
 		String time = String.valueOf(lesson.get("time"));
+		if(time.equals(lasttime)) {
+			logger.debug("[GEN_LESSON]: found dublicate.");
+			counter++;
+		}else {
+			lasttime=time;
+		}
+		num=num-counter;
 		String name = String.valueOf(lesson.get("lesson"));
 		String teacher = String.valueOf(lesson.get("teacher"));
 		String btn="<form action=\"/teacher:"+teacher+" \">\r\n"
