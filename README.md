@@ -7,7 +7,7 @@ Please, see *[wiki](https://github.com/Electronprod/TimeTableConfigurator/wiki)*
 <img width="451" alt="image" src="https://github.com/Electronprod/TimeTableConfigurator/assets/80621922/fab6a65f-e9ec-4f9c-aa20-0f57bb08b11c">
 
 ## 📙 Requirement
-* Make sure you have Java 8 or higher version installed.
+* Make sure you have Java 8-10 version installed.
   
 ## ⚙️ Setup
 1. Download latest release of program
