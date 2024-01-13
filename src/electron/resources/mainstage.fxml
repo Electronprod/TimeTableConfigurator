@@ -20,18 +20,21 @@
          <top>
             <MenuBar fx:id="topbar" BorderPane.alignment="CENTER">
               <menus>
-                <Menu fx:id="settingsbtn" mnemonicParsing="false" onShowing="#menuOpened" text="Settings">
+                <Menu fx:id="settingsbtn" mnemonicParsing="false" onShowing="#menuOpened" text="File">
                   <items>
                         <MenuItem mnemonicParsing="false" onAction="#showPreview" text="Preview" />
+                        <MenuItem mnemonicParsing="false" onAction="#showLessonsPreview" text="Lessons preview" />
                         <MenuItem mnemonicParsing="false" onAction="#importAction" text="Import" />
                         <MenuItem mnemonicParsing="false" onAction="#export" text="Export" />
                         <MenuItem fx:id="send" mnemonicParsing="false" onAction="#send" text="Send" />
+                        <MenuItem mnemonicParsing="false" onAction="#clearDatabase" text="Clear" />
                         <MenuItem fx:id="closebutton" mnemonicParsing="false" onAction="#closebtn" text="Close" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                   <items>
                         <MenuItem mnemonicParsing="false" onAction="#licenseinfo" text="License" />
+                        <MenuItem mnemonicParsing="false" onAction="#gitHub" text="GitHub" />
                     <MenuItem fx:id="aboutbtn" mnemonicParsing="false" onAction="#about" text="About" />
                   </items>
                 </Menu>

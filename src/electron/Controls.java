@@ -1,11 +1,15 @@
 package electron;
 
+import java.awt.Desktop;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -19,6 +23,7 @@ import org.json.simple.JSONObject;
 import electron.csv.CSV;
 import electron.data.FileOptions;
 import electron.data.outFile;
+import electron.preview.LessonsPreviewLauncher;
 import electron.preview.PreviewLauncher;
 import electron.utils.DayMethods;
 import electron.utils.logger;
@@ -269,6 +274,16 @@ public class Controls {
     	alert.show();
     	statusbar.setText("Showed license info");
     }
+    @FXML
+    private void gitHub() throws IOException, URISyntaxException {
+    	if (Desktop.isDesktopSupported()) { 
+            Desktop desktop = Desktop.getDesktop();
+               URI uri = new URI("https://github.com/Electronprod/TimeTableConfigurator");
+               desktop.browse(uri);
+    	}else {
+    		new modAlert(Alert.AlertType.ERROR,"Error: action is not supported on this computer.").Show();
+    	}
+    }
     
     /*
      * Others
@@ -277,7 +292,17 @@ public class Controls {
     private void showPreview() {
     	try {
 			new PreviewLauncher();
-			statusbar.setText("Showed preview");
+			statusbar.setText("Showed preview.");
+		} catch (IOException e) {
+			e.printStackTrace();
+			new Alert(Alert.AlertType.ERROR,"Error showing preview: "+e.getMessage());
+		}
+    }
+    @FXML
+    private void showLessonsPreview() {
+    	try {
+			new LessonsPreviewLauncher();
+			statusbar.setText("Showed lessons preview.");
 		} catch (IOException e) {
 			e.printStackTrace();
 			new Alert(Alert.AlertType.ERROR,"Error showing preview: "+e.getMessage());
@@ -324,10 +349,10 @@ public class Controls {
     private void send() {
     	statusbar.setText("Waiting for ip:port");
     	//Getting server address
-    	String address = JOptionPane.showInputDialog(new JFrame(), "Enter ip:port:", "Connect to server", JOptionPane.QUESTION_MESSAGE);
-        //Getting auth data
-    	String authdata = JOptionPane.showInputDialog(new JFrame(), "Enter login:password:", "Connect to server", JOptionPane.QUESTION_MESSAGE);
-    	statusbar.setText("Connecting to "+address);
+    	String address = showInputMessage("Connect to server","Enter ip:port, please:","Enter ip and port in format: 'ip:port'");
+    	//Getting auth data
+    	String authdata = showInputMessage("Connect to server","Enter login:password, please:","Enter login and password in format: 'login:password'");
+        statusbar.setText("Connecting to "+address);
     	String[] addrdata = address.split(":");
     	String[] auth = authdata.split(":");
     	try {
@@ -336,8 +361,17 @@ public class Controls {
 	    	//Sending auth data
 	    	JSONObject audata = new JSONObject();
 	    	audata.put("login", auth[0]);
-	    	audata.put("password", auth[1]);
+	    	audata.put("password", String.valueOf(auth[1].hashCode()));
 	    	sendData(client,audata.toJSONString());
+	    	//Waiting for confirmation
+	    	DataInputStream in = new DataInputStream(client.getInputStream());
+	        String str = in.readUTF();
+	        if(str.contains("0")) {
+				new Alert(Alert.AlertType.ERROR,"Server: Incorrect auth data.").show();;
+	        	return;
+	        }else {
+	        	logger.debug("[RemoteUploader]: correct auth data.");
+	        }
 	    	//Sending database's data
 	    	JSONObject data = new JSONObject();
 	    	data.put("data", outFile.getConfig().toJSONString());
@@ -354,6 +388,23 @@ public class Controls {
     	OutputStream outToServer = client.getOutputStream();
         DataOutputStream out = new DataOutputStream(outToServer);
         out.writeUTF(data);
+    }
+    private String showInputMessage(String title,String header,String question) {
+    	TextInputDialog td = new TextInputDialog(); 
+    	td.setTitle(title);
+    	td.setHeaderText(header);
+    	td.setContentText(question);
+    	td.showAndWait();
+    	return td.getEditor().getText();
+    }
+    @FXML
+    private void clearDatabase() {
+    	if(showConfirmDialog("Confirmation", "Are you sure?", "Do you want to remove all data?")) {
+    	outFile.clear();
+    	statusbar.setText("Removed all data from database.");
+    	return;
+    	}
+    	statusbar.setText("You canceled action 'Clear'");
     }
 }
 

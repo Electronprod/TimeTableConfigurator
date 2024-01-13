@@ -24,13 +24,14 @@ public class CSV {
 		//Variables
 		String classname = null;
 		String day = null;
+		String splitter = ";";
 		//Parsing all lines
 		for(int i = 0;i<lines.size();i++) {
 			//Getting current line
 			String line = lines.get(i);
 			//Class flag
 			if(line.toLowerCase().contains("!class")) {
-				String[] spl = line.split(";");
+				String[] spl = line.split(splitter);
 				logger.log("[CSV]: found class to add: "+spl[1]);
 				if(!outFile.createClass(spl[1])) {
 					error("Error creating new class.");
@@ -42,7 +43,8 @@ public class CSV {
 					error("Error in file format: classname isn't defined before day.");
 					return;
 				}
-				String[] spl = line.split(";");
+				
+				String[] spl = line.split(splitter);
 				logger.log("[CSV]: found day to add: "+spl[1]);
 				day = spl[1].toLowerCase();
 			}else {
@@ -54,7 +56,8 @@ public class CSV {
 					error("Error in file format: day isn't defined before lessons.");
 					return;
 				}
-				String[] spl = line.split(";");
+				String[] spl = line.split(splitter);
+				try {
 				logger.log("[CSV]: found lesson to add: "+spl[1]);
 				String time = spl[0];
 				String lesson = spl[1];
@@ -67,6 +70,9 @@ public class CSV {
 				if(!outFile.addLesson(teacher, lesson, "all", time, d, classname)) {
 					error("Error adding lesson to database. Line: "+i);
 					return;
+				}
+				}catch(ArrayIndexOutOfBoundsException e) {
+					
 				}
 			}
 		}

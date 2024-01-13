@@ -12,13 +12,14 @@ import electron.utils.logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import library.electron.updatelib.ActionListener;
 import library.electron.updatelib.UpdateLib;
 
 public class TimeTableConfigurator extends Application{
-	static final Double version = 1.1;
+	static final Double version = 1.3;
 	public static Stage st;
 	public static void main(String[] args) throws MalformedURLException {
 		//Parsing arguments
@@ -63,7 +64,7 @@ public class TimeTableConfigurator extends Application{
             	if(newversion>version) {
             		logger.error("-----------------[Update]-----------------");
             		logger.error("New version available: "+lastversion);
-            		logger.error("Release notes:");
+            		logger.error("");
             		logger.error(updater.getBody(versionobj));
             		logger.error("");
             		logger.error("Publish date: "+updater.getPublishDate(versionobj));
@@ -71,7 +72,7 @@ public class TimeTableConfigurator extends Application{
             		logger.error("Download it:");
             		logger.error(updater.getReleaseUrl(versionobj));
             		logger.error("-----------------[Update]-----------------");
-            		JOptionPane.showMessageDialog(new JFrame(), "New version available: "+lastversion+"\nRelease notes:\n"+updater.getBody(versionobj)+"\n\nPublish date: "+updater.getPublishDate(versionobj), "New version available", JOptionPane.WARNING_MESSAGE);
+            		JOptionPane.showMessageDialog(new JFrame(), "New version available: "+lastversion+"\n"+updater.getBody(versionobj)+"\n\nPublish date: "+updater.getPublishDate(versionobj), "Updater", JOptionPane.WARNING_MESSAGE);
             	}else {
             		logger.log("[Updater] it's latest version.");
             	}

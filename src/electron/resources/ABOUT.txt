@@ -1,2 +1,2 @@
 Made by Electron_prod
-MIT License
+Licensed under MIT License
